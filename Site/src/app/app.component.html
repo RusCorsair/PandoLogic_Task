@@ -1,0 +1,24 @@
+<div>
+  <div class="col-xs-12 col-12 col-md-4 form-group mb-3">
+    <input type="text"
+          placeholder="Select date range.."
+          class="form-control"
+          bsDaterangepicker
+          (bsValueChange)="onDaterangeChange($event)"
+          [bsConfig]="{ isAnimated: true, adaptivePosition: true, containerClass: 'theme-dark-blue' }">
+  </div>
+
+  <p *ngIf="errorMessage" class="error">Error: {{errorMessage}}</p>
+
+  <div *ngIf="isDataAvailable()">
+    <google-chart
+      [title]="title"
+      [type]="type"
+      [data]="data"
+      [columns]="columnNames"
+      [width]="width"
+      [height]="height"
+      [options]="options">
+    </google-chart>
+  <div>
+</div>
