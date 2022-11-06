@@ -1,4 +1,5 @@
 ﻿using API.Errors;
+using API.Services;
 using System.Net;
 using System.Text.Json;
 
@@ -8,12 +9,14 @@ namespace API.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly IHostEnvironment _env;
+        private readonly ILoggerService _loggerService;
 
         public ExceptionMiddleware(RequestDelegate next, 
-            IHostEnvironment env)
+            IHostEnvironment env, ILoggerService loggerService)
         {
             this._next = next;
             this._env = env;
+            this._loggerService = loggerService;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -24,6 +27,8 @@ namespace API.Middleware
             }
             catch (Exception ex)
             {
+                _loggerService.LogError(ex.Message, ex.StackTrace);
+
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
